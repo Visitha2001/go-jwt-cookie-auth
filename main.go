@@ -29,6 +29,7 @@ func main() {
 
 	// --- Setup Routes ---
 	routes.SetupAuthRoutes(app)
+	routes.ItemRoutes(app)
 
 	// Handle not found
 	app.Use(func(c *fiber.Ctx) error {
