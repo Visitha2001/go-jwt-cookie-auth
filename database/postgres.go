@@ -40,7 +40,13 @@ func ConnectDB() {
 	// Run migrations
 	err = models.MigrateUser(DB)
 	if err != nil {
-		log.Fatal("Failed to migrate database: ", err)
+		log.Fatal("Failed to migrate users", err)
 	}
-	fmt.Println("Database migration successful")
+	fmt.Println("User migration successful")
+
+	err = models.MigrateItems(DB)
+	if err != nil {
+		log.Fatal("Failed to migrate items", err)
+	}
+	fmt.Println("Items migration successful")
 }
