@@ -140,3 +140,36 @@ func DeleteItem(c *fiber.Ctx) error {
 		"item": id,
 	})
 }
+
+func GetItemsByUserID(c *fiber.Ctx) error {
+	id := c.Params("id")
+	if id == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status": "error", "message": "User ID is required",
+		})
+	}
+	var user models.User
+	if err := database.DB.First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+				"status": "error", "message": "User not found",
+			})
+		}
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status": "error", "message": "Could not fetch user",
+		})
+	}
+	var items []models.Item
+	if err := database.DB.Where("user_id = ?", id).Find(&items).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status": "error", "message": "Could not fetch items",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status":    "success",
+		"message":   "Items fetched successfully",
+		"user_id":   user.ID,
+		"user_name": user.Username,
+		"items":     items,
+	})
+}

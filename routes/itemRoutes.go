@@ -13,4 +13,5 @@ func ItemRoutes(app fiber.Router) {
 	itemGroup.Post("/", handlers.CreateItem)
 	itemGroup.Put("/update/:id", middleware.AuthRequired, handlers.UpdateItem)
 	itemGroup.Delete("/delete/:id", middleware.AuthRequired, handlers.DeleteItem)
+	itemGroup.Get("/user/:id", middleware.AuthRequired, handlers.GetItemsByUserID)
 }
