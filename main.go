@@ -37,6 +37,12 @@ func main() {
 			"status": "error", "message": "Route not found",
 		})
 	})
+	// root route
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status": "success", "message": "Welcome to the go-fiber server",
+		})
+	})
 
 	// Start server
 	port := ":" + os.Getenv("PORT")
